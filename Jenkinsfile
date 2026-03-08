@@ -3,37 +3,27 @@ pipeline {
 
     stages {
 
-        stage('Clone Repo') {
+        stage('Clone Code') {
             steps {
-                git 'https://github.com/Akash1738/aws-devops-maven-infra.git'
+                git 'https://github.com/YOUR_USERNAME/aws-devops-cicd-project.git'
             }
         }
 
-        stage('Build') {
+        stage('Build Maven') {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn clean install'
             }
         }
 
-        stage('Docker Build') {
+        stage('Build Docker Image') {
             steps {
-                sh 'docker build -t maven-app .'
+                sh 'docker build -t devops-app .'
             }
         }
 
-        stage('Terraform Init') {
+        stage('Run Container') {
             steps {
-                dir('terraform') {
-                    sh 'terraform init'
-                }
-            }
-        }
-
-        stage('Terraform Apply') {
-            steps {
-                dir('terraform') {
-                    sh 'terraform apply -auto-approve'
-                }
+                sh 'docker run -d -p 8080:8080 devops-app'
             }
         }
 
